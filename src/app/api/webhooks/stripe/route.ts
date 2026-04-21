@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   try {
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object as Stripe.CheckoutSession
+      const session = event.data.object as Stripe.Checkout.Session
       const orderId = session.metadata?.order_id
       if (!orderId) return NextResponse.json({ received: true })
 
