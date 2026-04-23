@@ -15,15 +15,17 @@ interface Props {
 export async function ProductGrid({ filters, page, query = '', isNew = false }: Props) {
   let productIds: string[] | null = null
 
+  // Semantic search via direct Pinecone call (no internal fetch)
   if (query.length > 2) {
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/search?q=${encodeURIComponent(query)}${filters.category ? `&category=${filters.category}` : ''}`,
-        { cache: 'no-store' }
-      )
-      const data = await res.json() as { products: Product[] }
-      productIds = (data.products ?? []).map(p => p.id)
-    } catch { productIds = [] }
+      const { semanticSearch } = await import('@/lib/pinecone')
+      productIds = await semanticSearch(query, 48, {
+        category: filters.category,
+        max_price: filters.max_price,
+      })
+    } catch {
+      productIds = []
+    }
 
     if (!productIds || productIds.length === 0) {
       return (
