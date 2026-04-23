@@ -139,7 +139,7 @@ export default async function HomePage() {
         </section>
       </main>
       <Footer />
-      <AiStylistButton />
+      {process.env.ANTHROPIC_API_KEY && <AiStylistButton />}
     </>
   )
 }

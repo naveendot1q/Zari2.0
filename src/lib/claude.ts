@@ -1,7 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk'
 import type { AIStylingMessage } from '@/types'
-
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! })
 
 export async function generateProductDescription(product: {
   name: string
@@ -9,6 +6,13 @@ export async function generateProductDescription(product: {
   material?: string
   tags?: string[]
 }): Promise<{ description: string; short_description: string; instagram_caption: string }> {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return { description: '', short_description: '', instagram_caption: '' }
+  }
+
+  const Anthropic = (await import('@anthropic-ai/sdk')).default
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
   const prompt = `Generate product copy for an Indian women's clothing store called Zari.
 
 Product:
@@ -35,27 +39,5 @@ Return only valid JSON, no markdown backticks.`
     return JSON.parse(text) as { description: string; short_description: string; instagram_caption: string }
   } catch {
     return { description: '', short_description: '', instagram_caption: '' }
-  }
-}
-
-export async function streamStyleAdvice(
-  messages: AIStylingMessage[],
-  onChunk: (text: string) => void,
-  contextProductName?: string
-): Promise<void> {
-  const system = `You are Zari's styling assistant. Give warm, concise fashion advice for Indian women's clothing.${contextProductName ? ` The customer is viewing: ${contextProductName}.` : ''} Keep responses under 120 words.`
-
-  const stream = await anthropic.messages.create({
-    model: 'claude-opus-4-5',
-    max_tokens: 400,
-    system,
-    messages: messages.map(m => ({ role: m.role, content: m.content })),
-    stream: true,
-  })
-
-  for await (const event of stream) {
-    if (event.type === 'content_block_delta' && event.delta.type === 'text_delta') {
-      onChunk(event.delta.text)
-    }
   }
 }

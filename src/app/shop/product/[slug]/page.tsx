@@ -153,7 +153,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </main>
       <Footer />
-      <AiStylistButton contextProduct={product} />
+      {process.env.ANTHROPIC_API_KEY && <AiStylistButton contextProduct={product} />}
     </>
   )
 }
