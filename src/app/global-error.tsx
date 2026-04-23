@@ -11,7 +11,10 @@ export default function GlobalError({
   reset: () => void
 }) {
   useEffect(() => {
-    Sentry.captureException(error)
+    console.error('Global error:', error)
+    try {
+      Sentry.captureException(error)
+    } catch {}
   }, [error])
 
   return (
@@ -20,11 +23,23 @@ export default function GlobalError({
         <div style={{
           minHeight: '100vh', display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
-          fontFamily: 'system-ui, sans-serif', background: '#faf9f7',
+          fontFamily: 'system-ui, sans-serif', background: '#faf9f7', padding: '2rem',
         }}>
-          <h2 style={{ fontSize: '24px', fontWeight: 400, marginBottom: '12px' }}>Something went wrong</h2>
-          <p style={{ color: '#888', fontSize: '14px', marginBottom: '24px' }}>We&apos;ve been notified and are looking into it.</p>
-          <button onClick={reset} style={{ background: '#1a1a1a', color: '#fff', border: 'none', padding: '12px 28px', fontSize: '14px', cursor: 'pointer' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 400, marginBottom: '12px' }}>
+            Something went wrong
+          </h2>
+          <p style={{ color: '#888', fontSize: '14px', marginBottom: '8px' }}>
+            We&apos;ve been notified and are looking into it.
+          </p>
+          {error?.message && (
+            <p style={{ color: '#bbb', fontSize: '12px', marginBottom: '24px', fontFamily: 'monospace' }}>
+              {error.message}
+            </p>
+          )}
+          <button
+            onClick={reset}
+            style={{ background: '#1a1a1a', color: '#fff', border: 'none', padding: '12px 28px', fontSize: '14px', cursor: 'pointer' }}
+          >
             Try again
           </button>
         </div>
