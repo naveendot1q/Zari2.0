@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { supabaseAdmin } from '@/lib/supabase'
 
 export async function GET() {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) return NextResponse.json({ items: [] })
 
   const { data } = await supabaseAdmin
@@ -16,7 +16,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { product_id } = await req.json() as { product_id: string }
   await supabaseAdmin.from('wishlists').upsert({ user_id: userId, product_id })
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { product_id } = await req.json() as { product_id: string }
   await supabaseAdmin.from('wishlists').delete().eq('user_id', userId).eq('product_id', product_id)

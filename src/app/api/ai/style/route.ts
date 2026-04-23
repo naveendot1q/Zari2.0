@@ -8,7 +8,7 @@ import type { AIStylingMessage } from '@/types'
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! })
 
 export async function POST(req: NextRequest) {
-  const { userId } = auth()
+  const { userId } = await auth()
   const identifier = userId ?? req.headers.get('x-forwarded-for') ?? 'anon'
 
   const { success } = await aiChatRateLimit.limit(identifier)

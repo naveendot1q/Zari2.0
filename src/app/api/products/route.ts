@@ -7,7 +7,7 @@ import { invalidateCache } from '@/lib/upstash'
 import type { Product } from '@/types'
 
 async function requireAdmin(): Promise<string | null> {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) return null
   const { data: pd } = await supabaseAdmin.from('profiles').select('role').eq('id', userId).single()
   const d = pd as { role: string } | null

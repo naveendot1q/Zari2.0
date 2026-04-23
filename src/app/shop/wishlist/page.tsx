@@ -9,7 +9,7 @@ import { ProductCard } from '@/components/shop/ProductCard'
 import type { Product } from '@/types'
 
 export default async function WishlistPage() {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) redirect('/auth/sign-in')
 
   const { data: wishlistItems } = await supabaseAdmin

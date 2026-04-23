@@ -15,7 +15,7 @@ interface Props {
 }
 
 export default async function OrderDetailPage({ params, searchParams }: Props) {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) redirect('/auth/sign-in')
 
   const { id } = await params

@@ -27,7 +27,7 @@ interface OrderRow {
 }
 
 export default async function OrdersPage() {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) redirect('/auth/sign-in')
 
   const { data: orders } = await supabaseAdmin

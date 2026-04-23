@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server'
 import { supabaseAdmin } from '@/lib/supabase'
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
   const { quantity } = await req.json() as { quantity: number }
@@ -19,7 +19,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { userId } = auth()
+  const { userId } = await auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
   await supabaseAdmin.from('cart_items').delete().eq('id', id).eq('user_id', userId)
