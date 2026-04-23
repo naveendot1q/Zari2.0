@@ -34,7 +34,7 @@ async function getRecentOrders() {
 }
 
 export default async function AdminDashboard() {
-  const { userId } = await auth()
+  const { userId } = auth()
   if (!userId) redirect('/auth/sign-in')
 
   const { data: pd } = await supabaseAdmin.from('profiles').select('role').eq('id', userId).single()

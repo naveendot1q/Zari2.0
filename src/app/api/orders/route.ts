@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const { success } = await checkoutRateLimit.limit(ip)
   if (!success) return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
 
-  const { userId } = await auth()
+  const { userId } = auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await req.json() as {
@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const { userId } = await auth()
+  const { userId } = auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const url = new URL(req.url)

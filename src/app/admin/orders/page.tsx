@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default async function AdminOrdersPage({ searchParams }: Props) {
-  const { userId } = await auth()
+  const { userId } = auth()
   if (!userId) redirect('/auth/sign-in')
   const { data: profileData } = await supabaseAdmin.from('profiles').select('role').eq('id', userId).single()
   const profile = profileData as { role: string } | null

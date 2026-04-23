@@ -6,7 +6,7 @@ import sharp from 'sharp'
 const BUCKET = 'product-images'
 
 export async function POST(req: NextRequest) {
-  const { userId } = await auth()
+  const { userId } = auth()
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const { data: pd } = await supabaseAdmin.from('profiles').select('role').eq('id', userId).single()
