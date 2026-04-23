@@ -69,7 +69,7 @@ export function Navbar() {
             </Link>
 
             {isSignedIn ? (
-              <UserButton afterSignOutUrl="/" />
+              <UserButton signOutUrl="/" />
             ) : (
               <Link href="/auth/sign-in" className="text-xs tracking-widest uppercase text-[#666] hover:text-[#1a1a1a] transition-colors">
                 Sign In
