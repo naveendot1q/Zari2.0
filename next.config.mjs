@@ -2,7 +2,14 @@ import { withSentryConfig } from '@sentry/nextjs'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  serverExternalPackages: ['sharp'],
+  serverExternalPackages: [
+    'sharp',
+    '@anthropic-ai/sdk',
+    '@pinecone-database/pinecone',
+    'stripe',
+    'axios',
+    'svix',
+  ],
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '*.supabase.co' },
